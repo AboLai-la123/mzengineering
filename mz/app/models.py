@@ -68,7 +68,7 @@ class Order(models.Model):
     archived            = models.BooleanField(default=False)
 
     def __str__(self):
-        return str(self.order_number) + " " + self.order_type
+        return str(self.order_num) + " " + self.order_type
 
 
 def create_image(size, bgColor, message, font, fontColor):
@@ -103,12 +103,48 @@ class Object(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     object_img = models.ImageField(default='img/unknown.png' , upload_to="object")
 
+    # def updateImage(self, *args, **kwargs):
+    #     reshaped_text = arabic_reshaper.reshape(self.order.user.consultant_name)
+    #     bidi_text = bidi.algorithm.get_display(reshaped_text)
+    #     reshaped_text2 = arabic_reshaper.reshape(self.order.distract)
+    #     bidi_text2 = bidi.algorithm.get_display(reshaped_text2)
+    #     reshaped_text3 = arabic_reshaper.reshape(str(self.order.date))
+    #     bidi_text3 = bidi.algorithm.get_display(reshaped_text3)
+    #     reshaped_text4 = arabic_reshaper.reshape("النماذج")
+    #     bidi_text4 = bidi.algorithm.get_display(reshaped_text4)
+    #     apath = self.object_img.path
+    #     limg = Image.open(apath)
+    #     isImageTakedWithPhone = is_taken_with_phone(apath)
+    #     if isImageTakedWithPhone:
+    #         limg = limg.rotate(-90, expand=True)
+    #     limg = limg.resize((400,650))
+    #     try:limg2 = Image.open(thePath)
+    #     except:limg2 = Image.open('./static/img/logo.png')
+    #     limg2.thumbnail((300,200))
+
+    #     myFont = ImageFont.truetype(thePath, 35)
+    #     myFont2 = ImageFont.truetype(thePath, 17)
+    #     myMessage = bidi_text
+    #     myMessage2 = bidi_text2
+    #     myMessage3 = bidi_text3
+    #     myMessage4 = bidi_text4
+    #     myImage = create_image((400, 800), 'white', myMessage, myFont, 'black')
+    #     text = create_image2((400, 800), 'white', myMessage2, myFont2, 'black',myImage)
+    #     text3 = create_image3((400, 800), 'white', myMessage3, myFont2, 'black',myImage)
+    #     text4 = create_image4((400, 800), 'white', myMessage4, myFont2, 'black',myImage)
+    #     myImage.paste(limg,(0,0))
+    #     myImage.paste(limg2,(0,0))
+
+    #     myImage.save(apath)
+
     def updateImage(self, *args, **kwargs):
+        super(Object, self).save(*args, **kwargs)
+
         reshaped_text = arabic_reshaper.reshape(self.order.user.consultant_name)
         bidi_text = bidi.algorithm.get_display(reshaped_text)
         reshaped_text2 = arabic_reshaper.reshape(self.order.distract)
         bidi_text2 = bidi.algorithm.get_display(reshaped_text2)
-        reshaped_text3 = arabic_reshaper.reshape(self.order.date)
+        reshaped_text3 = arabic_reshaper.reshape(str(self.order.date.date()))
         bidi_text3 = bidi.algorithm.get_display(reshaped_text3)
         reshaped_text4 = arabic_reshaper.reshape("النماذج")
         bidi_text4 = bidi.algorithm.get_display(reshaped_text4)
@@ -118,9 +154,12 @@ class Object(models.Model):
         if isImageTakedWithPhone:
             limg = limg.rotate(-90, expand=True)
         limg = limg.resize((400,650))
-        try:limg2 = Image.open(thePath)
+        try:limg2 = Image.open(theLogo)
         except:limg2 = Image.open('./static/img/logo.png')
         limg2.thumbnail((300,200))
+        try:limg3 = Image.open(theLogo.replace("logo.png", "seal.jpg"))
+        except:limg3 = Image.open('./static/img/seal.jpg')
+        limg3.thumbnail((170,170))
 
         myFont = ImageFont.truetype(thePath, 35)
         myFont2 = ImageFont.truetype(thePath, 17)
@@ -128,12 +167,13 @@ class Object(models.Model):
         myMessage2 = bidi_text2
         myMessage3 = bidi_text3
         myMessage4 = bidi_text4
-        myImage = create_image((400, 1000), 'white', myMessage, myFont, 'black')
-        text = create_image2((400, 1000), 'white', myMessage2, myFont2, 'black',myImage)
-        text3 = create_image3((400, 1000), 'white', myMessage3, myFont2, 'black',myImage)
-        text4 = create_image4((400, 1000), 'white', myMessage4, myFont2, 'black',myImage)
+        myImage = create_image((400, 820), 'white', myMessage, myFont, 'black')
+        text = create_image2((400, 820), 'white', myMessage2, myFont2, 'black',myImage)
+        text3 = create_image3((400, 820), 'white', myMessage3, myFont2, 'black',myImage)
+        text4 = create_image4((400, 820), 'white', myMessage4, myFont2, 'black',myImage)
         myImage.paste(limg,(0,0))
         myImage.paste(limg2,(0,0))
+        myImage.paste(limg3,(0,720))
 
         myImage.save(apath)
 
@@ -147,7 +187,7 @@ class Address(models.Model):
         bidi_text = bidi.algorithm.get_display(reshaped_text)
         reshaped_text2 = arabic_reshaper.reshape(self.order.distract)
         bidi_text2 = bidi.algorithm.get_display(reshaped_text2)
-        reshaped_text3 = arabic_reshaper.reshape(self.order.date)
+        reshaped_text3 = arabic_reshaper.reshape(str(self.order.date))
         bidi_text3 = bidi.algorithm.get_display(reshaped_text3)
         reshaped_text4 = arabic_reshaper.reshape("صور الموقع")
         bidi_text4 = bidi.algorithm.get_display(reshaped_text4)
@@ -167,10 +207,10 @@ class Address(models.Model):
         myMessage2 = bidi_text2
         myMessage3 = bidi_text3
         myMessage4 = bidi_text4
-        myImage = create_image((400, 1000), 'white', myMessage, myFont, 'black')
-        text = create_image2((400, 1000), 'white', myMessage2, myFont2, 'black',myImage)
-        text3 = create_image3((400, 1000), 'white', myMessage3, myFont2, 'black',myImage)
-        text4 = create_image4((400, 1000), 'white', myMessage4, myFont2, 'black',myImage)
+        myImage = create_image((400, 800), 'white', myMessage, myFont, 'black')
+        text = create_image2((400, 800), 'white', myMessage2, myFont2, 'black',myImage)
+        text3 = create_image3((400, 800), 'white', myMessage3, myFont2, 'black',myImage)
+        text4 = create_image4((400, 800), 'white', myMessage4, myFont2, 'black',myImage)
         myImage.paste(limg,(0,0))
         myImage.paste(limg2,(0,0))
 
@@ -179,13 +219,5 @@ class Address(models.Model):
 
 class Violation(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    address_img = models.ImageField(default='img/unknown.png' , upload_to="address")
+    violation_img = models.ImageField(default='img/unknown.png' , upload_to="violation_img")
     notes = models.TextField()
-
-    def updateImage(self, *args, **kwargs):
-        apath = self.address_img.path
-        limg = Image.open(apath)
-        isImageTakedWithPhone = is_taken_with_phone(apath)
-        if isImageTakedWithPhone:
-            limg = limg.rotate(-90, expand=True)
-        limg = limg.resize((400,650))

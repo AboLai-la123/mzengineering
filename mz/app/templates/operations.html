@@ -1,24 +1,26 @@
 {% extends 'home.html' %}
 {% load static %}
-{% block title %}المشتركين{% endblock %}
-{% block header %}المشتركين{% endblock %}
+{% block title %}العمليات والصيانة{% endblock %}
+{% block header %}العمليات والصيانة{% endblock %}
 {% block content %}
 <div class="switcher">
     <div id="switch1">
         <div class="w1">
-            <button onclick="document.getElementById('switch1').style.marginLeft='-100%';">إضافة طلب</button>
-            <button onclick="document.getElementById('switch1').style.marginLeft='-200%';">عرض طلب</button>
+            <button onclick="document.getElementById('switch1').style.marginLeft='-100%';">إضافة عملية صيانية</button>
+            <button onclick="document.getElementById('switch1').style.marginLeft='-200%';">عرض عملية صيانية</button>
         </div>
     </div>
     <div id="switch2">
         <form method = "POST" data-form id = "addOrderForm" enctype="multipart/form-data">
-            <p class="form-header">إضافة طلب</p>
+            <p class="form-header">إضافة عملية صيانية</p>
             <button type="button" onclick="document.getElementById('switch1').removeAttribute('style')" class="ibtn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
             {% csrf_token %}
-            <input type="text" name="orderNum" placeholder="رقم الطلب" required><br>
+            <input type="text" name="orderNum" placeholder="رقم العطل" required><br>
             <select name="orderType">
-                <option value="تنفيذ شبكة">تنفيذ شبكة</option>
-                <option value="عداد">عداد</option>
+                <option value="طوارئ">طوارئ</option>
+                <option value="إحلال">إحلال</option>
+                <option value="التعزيز">التعزيز</option>
+                <option value="الجهد المتوسط">الجهد المتوسط</option>
             </select><br>
             <input type="text" name="contractor" placeholder="المقاول" required><br>
             <input type="text" name="distract" placeholder="الحي" required><br>
@@ -71,20 +73,20 @@
             <br>
             <br>
             <input type="hidden" id="isArchive" name="isArchive" value="no">
-            <button type="button" id="saveBtn" class="primary">حفظ الطلب</button>
-            <button type="button" id="archiveBtn" class="primary">أرشفة الطلب</button>
+            <button type="button" id="saveBtn" class="primary">حفظ</button>
+            <button type="button" id="archiveBtn" class="primary">أرشفة</button>
         </form>
     </div>
     <div id="switch3">
-        <p style="text-align:right;margin-top:10px;">الطلبات الغير مكتملة</p>
+        <p style="text-align:right;margin-top:10px;">العمليات الغير مكتملة</p>
         <button type="button" onclick="document.getElementById('switch1').removeAttribute('style')" class="ibtn" style="margin-top:-40px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
         <div class="list">
             {% for d in data %}
             <p>{{d.0}}</p>
             {% for w in d.1 %}
             <button data-order = "{{w.3}}" onclick="document.getElementById('switch1').style.marginLeft='-300%';">
-                <p class="header">رقم الطلب : {{w.0}}</p>
-                <p class="sub-header">نوع الطلب : {{w.1}}</p>
+                <p class="header">رقم العملية الصيانية : {{w.0}}</p>
+                <p class="sub-header">نوع العملية الصيانية : {{w.1}}</p>
                 <p class="date">{{w.2}}</p>
             </button>
             {% endfor %}
@@ -94,13 +96,15 @@
     <div id="switch4">
         <form method = "POST" data-form id = "editOrderForm" enctype="multipart/form-data">
             <input type="hidden" id="orderPK" name="orderPK">
-            <p class="form-header">تعديل طلب</p>
+            <p class="form-header">تعديل عملية صيانية</p>
             <button type="button" onclick="document.getElementById('switch1').style.marginLeft='-200%';" class="ibtn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
             {% csrf_token %}
-            <input type="text" name="orderNumE" id = "orderNumE" placeholder="رقم الطلب" required><br>
+            <input type="text" name="orderNumE" id = "orderNumE" placeholder="رقم العملية الصيانية" required><br>
             <select name="orderTypeE" id = "orderTypeE">
-                <option value="تنفيذ شبكة">تنفيذ شبكة</option>
-                <option value="عداد">عداد</option>
+                <option value="طوارئ">طوارئ</option>
+                <option value="إحلال">إحلال</option>
+                <option value="التعزيز">التعزيز</option>
+                <option value="الجهد المتوسط">الجهد المتوسط</option>
             </select><br>
             <input type="text" name="contractorE" id = "contractorE" placeholder="المقاول" required><br>
             <input type="text" name="distractE" id = "distractE" placeholder="الحي" required><br>
@@ -153,8 +157,8 @@
             <br>
             <br>
             <input type="hidden" id="isArchiveE" name="isArchiveE" value="no">
-            <button type="button" id="saveBtnE" class="primary">حفظ الطلب</button>
-            <button type="button" id="archiveBtnE" class="primary">أرشفة الطلب</button>
+            <button type="button" id="saveBtnE" class="primary">حفظ</button>
+            <button type="button" id="archiveBtnE" class="primary">أرشفة</button>
         </form>
     </div>
 </div>
