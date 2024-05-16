@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}الصفحة الرئيسية{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style/min.style.css' %}">
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+
+    <meta name = “theme-color” content = “#cccccc”>
+    <meta name = "msapplication-navbutton-color" content = "#cccccc">
+    <meta name = "apple-mobile-web-app-capable" content = "#cccccc">
+    <meta name = "apple-mobile-web-app-status-bar-style" content = "#cccccc">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp" />
+  </head>
+  <body>
+    <nav>
+      <button id="nav"><span class="material-symbols-sharp">menu</span></button>
+      <p class="header">{% block header %}الصفحة الرئيسية{% endblock %}</p>
+      <ul>
+        <li><a href="/">الصفحة الرئيسية</a></li>
+        <li><a href="/subscribers">المشتركين</a></li>
+        <li><a href="/operations">العمليات والصيانة</a></li>
+        <li><a href="/settings">الضبط</a></li>
+        <li><a style="color:red" href="/logout">تسجيل الخروج</a></li>
+      </ul>
+    </nav>
+    <main>
+    {% block content %}
+    {% endblock %}
+    </main>
+    <div id="snackbar" class="snackbar"><p id="snackbarText"></p></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    document.body.style.display = 'none';
+  });
+  window.addEventListener('load', function() {
+    document.body.style.display = 'block';
+  });
+      </script>
+    <script src="{% static 'script/jQuery.js' %}"></script>
+    <script src="{% static 'script/jq.js' %}"></script>
+  </body>
+</html>

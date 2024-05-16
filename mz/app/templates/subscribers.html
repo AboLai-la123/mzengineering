@@ -1,0 +1,78 @@
+{% extends 'home.html' %}
+{% load static %}
+{% block title %}المشتركين{% endblock %}
+{% block header %}المشتركين{% endblock %}
+{% block content %}
+<div class="switcher">
+    <div id="switch1">
+        <div class="w1">
+            <button onclick="document.getElementById('switch1').style.marginLeft='-100%';">إضافة طلب</button>
+            <button onclick="document.getElementById('switch1').style.marginLeft='-200%';">عرض طلب</button>
+        </div>
+    </div>
+    <div id="switch2">
+        <form method = "POST" data-form id = "addOrderForm" enctype="multipart/form-data">
+            <p class="form-header">إضافة طلب</p>
+            <button type="button" onclick="document.getElementById('switch1').removeAttribute('style')" class="ibtn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
+            {% csrf_token %}
+            <input type="text" name="orderNum" placeholder="رقم الطلب" required><br>
+            <select name="orderType">
+                <option value="تنفيذ شبكة">تنفيذ شبكة</option>
+                <option value="عداد">عداد</option>
+            </select><br>
+            <input type="text" name="contractor" placeholder="المقاول" required><br>
+            <input type="text" name="distract" placeholder="الحي" required><br>
+            <p class="text">الصور</p>
+            <h3 style="text-align:right;">النماذج</h3>
+            <br><br>
+            <button type="button" data-for="object" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
+            <input type="file" id="object" accept="image/*" hidden>
+            <div id="objectsImages">
+            </div>
+            <br>
+            <br>
+            <h3 style="text-align:right;">صور الموقع</h3>
+            <br><br>
+            <button type="button" data-for="address" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
+            <input type="file" id="address" accept="image/*" hidden>
+            <div id="addressesImages">
+            </div>
+            <br>
+            <p class="text">مخالفات السلامة</p>
+            <label style="float:right;" class="pure-material-radio">
+                <input type="radio" onchange="document.getElementById('violationCondition').value='on';" name="group">
+                <span>توجد</span>
+            </label>
+            <br/>
+            <br/>
+            <label style="float:right;" class="pure-material-radio">
+                <input type="radio" onchange="document.getElementById('violationCondition').value='off';" name="group" checked>
+                <span>لا توجد</span>
+            </label>
+
+            <input type="hidden" id="violationCondition" name="violationCondition" value="off">
+
+            
+            <br>
+            <br>
+            <h3 style="text-align:right;">مخالفات السلامة</h3>
+            <br><br>
+            <button type="button" data-for="violation" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
+            <input type="file" id="violation" accept="image/*" hidden>
+            <div id="violationsImages">
+            </div>
+
+            <br>
+            <br>
+            <hr>
+            <br>
+            <br>
+            <button class="primary">حفظ الطلب</button>
+            <button type="button" class="primary">أرشفة الطلب</button>
+        </form>
+    </div>
+    <div id="switch3">
+        عرض طلب
+    </div>
+</div>
+{% endblock %}
