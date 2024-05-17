@@ -98,7 +98,7 @@ $(document).on("submit", "form[data-form]",function(e){
 			}
 		},
 		error: function(res){
-			console.log(res);
+			snackBar("حدث خطأ اثناء الحفظ !");
 		}
 	});
 });
@@ -495,7 +495,7 @@ function orderForm(){
 			}
 		},
 		error: function(res){
-			console.log(res);
+			snackBar("حدث خطأ اثناء الحفظ !");
 		}
 	});
 }
@@ -522,7 +522,7 @@ function orderFormE(){
 			}
 		},
 		error: function(res){
-			console.log(res);
+			snackBar("حدث خطأ اثناء الحفظ !");
 		}
 	});
 }
@@ -626,7 +626,7 @@ $(document).on("click", ".list > button", function(){
 			});
 		},
 		error: function(res){
-			console.log(res);
+			snackBar("حدث خطأ اثناء الحفظ !");
 		}
 	});
 });

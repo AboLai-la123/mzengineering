@@ -29,8 +29,8 @@ if os.path.expanduser("~") == 'C:\\Users\\H1720':
     thePath = r"C:\Users\H1720\Documents\mz-engineering\mzengineering\static\fonts\arial.ttf"
     theLogo = r"C:\Users\H1720\Documents\mz-engineering\mzengineering\static\img\logo.png"
 else:
-    thePath = "/home/mzengineering/mz-engineering/mzengineering/static/fonts/arial.ttf"
-    theLogo = "/home/mzengineering/mz-engineering/mzengineering/static/img/logo.png"
+    thePath = "/home/assays/mzengineering/mz/static/fonts/arial.ttf"
+    theLogo = "/home/assays/mzengineering/mz/static/img/logo.png"
 
 class UserTable(models.Model):
     main_user       = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -156,10 +156,10 @@ class Object(models.Model):
             limg = limg.rotate(-90, expand=True)
         limg = limg.resize((400,650))
         try:limg2 = Image.open(theLogo)
-        except:limg2 = Image.open('./static/img/logo.png')
+        except:limg2 = Image.open('/home/assays/mzengineering/mz/static/img/logo.png')
         limg2.thumbnail((300,200))
         try:limg3 = Image.open(theLogo.replace("logo.png", "seal.jpg"))
-        except:limg3 = Image.open('./static/img/seal.jpg')
+        except:limg3 = Image.open('/home/assays/mzengineering/mz/static/img/seal.jpg')
         limg3.thumbnail((170,170))
 
         myFont = ImageFont.truetype(thePath, 35)
@@ -199,7 +199,7 @@ class Address(models.Model):
             limg = limg.rotate(-90, expand=True)
         limg = limg.resize((400,650))
         try:limg2 = Image.open(theLogo)
-        except:limg2 = Image.open('./static/img/logo.png')
+        except:limg2 = Image.open('/home/assays/mzengineering/mz/static/img/logo.png')
         limg2.thumbnail((300,200))
 
         myFont = ImageFont.truetype(thePath, 35)
