@@ -26,38 +26,102 @@
         <li><a href="/">الصفحة الرئيسية</a></li>
         <li><a href="/subscribers">المشتركين</a></li>
         <li><a href="/operations">العمليات والصيانة</a></li>
+        <li><a href="/projects">المشاريع</a></li>
         <li><a href="/settings">الضبط</a></li>
         <li><a style="color:red" href="/logout">تسجيل الخروج</a></li>
       </ul>
     </nav>
     <main>
     {% block content %}
-    <div style="padding:20px;">
-      <p style="text-align:right;margin-top:10px;">الطلبات المكتملة</p>
-      <div class="list">
-          <p>أكتوبر</p>
-          <div>
-              <p class="header">رقم الطلب : 2323</p>
-              <p class="sub-header">نوع الطلب : مشترك</p>
-              <p class="date">الخميس 15</p>
-          </div>
-          <div>
-              <p class="header">رقم الطلب : 2323</p>
-              <p class="sub-header">نوع الطلب : مشترك</p>
-              <p class="date">الخميس 15</p>
-          </div>
-          <p>نوفمبر</p>
-          <div>
-              <p class="header">رقم الطلب : 2323</p>
-              <p class="sub-header">نوع الطلب : مشترك</p>
-              <p class="date">الخميس 15</p>
-          </div>
-          <div>
-              <p class="header">رقم الطلب : 2323</p>
-              <p class="sub-header">نوع الطلب : مشترك</p>
-              <p class="date">الخميس 15</p>
-          </div>
+    <div class="switcher">
+      <div id="switch1">
+        <p style="text-align:right;margin-top:10px;">الطلبات المكتملة</p>
+        <div class="list">
+          {% for d in data %}
+          <p>{{d.0}}</p>
+          {% for w in d.1 %}
+          <button data-order = "{{w.3}}" onclick="document.getElementById('switch1').style.marginLeft='-100%';">
+              <p class="header">رقم الطلب : {{w.0}}</p>
+              <p class="sub-header">نوع الطلب : {{w.1}}</p>
+              <p class="date">{{w.2}}</p>
+          </button>
+          <br>
+          {% endfor %}
+          {% endfor %}
+        </div>
       </div>
+      <div id="switch2">
+            <p class="form-header">الطلب رقم : <span id="orderIDLabel"></span></p>
+            <button type="button" onclick="document.getElementById('switch1').removeAttribute('style')" class="ibtn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
+      </div>
+      <div id="switch3">
+        <form method = "POST" data-form id = "editOrderForm" enctype="multipart/form-data">
+            <input type="hidden" id="orderPK" name="orderPK">
+            <p class="form-header">تعديل طلب</p>
+            <button type="button" class="ibtn close-btn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
+            {% csrf_token %}
+            <input type="text" name="orderNumE" id = "orderNumE" placeholder="رقم الطلب" required><br>
+            <select name="orderTypeE" id = "orderTypeE">
+                <option value="تنفيذ شبكة">تنفيذ شبكة</option>
+                <option value="عداد">عداد</option>
+            </select><br>
+            <input type="text" name="contractorE" id = "contractorE" placeholder="المقاول" required><br>
+            <input type="text" name="distractE" id = "distractE" placeholder="الحي" required><br>
+            <p class="text">الصور</p>
+            <h3 style="text-align:right;">النماذج</h3>
+            <br><br>
+            <button type="button" data-for="objectE" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
+            <input type="file" id="objectE" accept="image/*" hidden>
+            <div id="objectsImagesE">
+            </div>
+            <br>
+            <br>
+            <h3 style="text-align:right;">صور الموقع</h3>
+            <br><br>
+            <button type="button" data-for="addressE" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
+            <input type="file" id="addressE" accept="image/*" hidden>
+            <div id="addressesImagesE">
+            </div>
+            <br>
+            <p class="text">مخالفات السلامة</p>
+            <label style="float:right;" class="pure-material-radio">
+                <input type="radio" id="check1" onchange="document.getElementById('violationConditionE').value='on';document.getElementById('violationsContainerE').style.display = 'block';" name="groupE">
+                <span>توجد</span>
+            </label>
+            <br/>
+            <br/>
+            <label style="float:right;" class="pure-material-radio">
+                <input type="radio" onchange="document.getElementById('violationConditionE').value='off';document.getElementById('violationsContainerE').style.display = 'none';" name="groupE" checked>
+                <span>لا توجد</span>
+            </label>
+
+            <input type="hidden" id="violationConditionE" name="violationConditionE" value="off">
+
+            <div style="display:none;" id="violationsContainerE">
+                <br>
+                <br>
+                <h3 style="text-align:right;">مخالفات السلامة</h3>
+                <br><br>
+                <button type="button" data-for="violationE" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
+                <input type="file" id="violationE" accept="image/*" hidden>
+                <!-- <div id="violationsImages">
+                </div> -->
+                <div id="violationsImagesE">
+                </div>
+            </div>
+
+            <br>
+            <br>
+            <hr>
+            <br>
+            <br>
+            <input type="hidden" id="isArchiveE" name="isArchiveE" value="no">
+            <button type="button" id="saveBtnE" class="primary">حفظ الطلب</button>
+            <button type="button" id="archiveBtnE" class="primary">أرشفة الطلب</button>
+        </form>
+      </div>
+
+      
     </div>
     {% endblock %}
     </main>

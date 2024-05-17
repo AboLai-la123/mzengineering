@@ -54,6 +54,7 @@ class Order(models.Model):
         SUBSTITUTE = 'إحلال'
         REINFORCEMENT = 'التعزيز'
         EFFORT = 'الجهد المتوسط'
+        PROJECTS = 'مشروع'
     order_type          = models.CharField(max_length=50, choices=Orders.choices)
     employment_type     = models.CharField(max_length=40,null=True,blank=True)
     contractor_name     = models.CharField(max_length=50)

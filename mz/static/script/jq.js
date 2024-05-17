@@ -106,7 +106,7 @@ $(document).on("submit", "form[data-form]",function(e){
 
 $(document).on("click","#nav",function(){
 	if(document.querySelector("nav").style.height == ""){
-		document.querySelector("nav").style.height = "275px";
+		document.querySelector("nav").style.height = "300px";
 	}else{
 		document.querySelector("nav").removeAttribute("style");
 	}
@@ -563,9 +563,12 @@ $(document).on("click", ".list > button", function(){
 		success: function(res) {
 			document.getElementById("orderPK").value = res.data[0];
 			document.getElementById("orderNumE").value = res.data[1];
-			document.getElementById("orderTypeE").value = res.data[2];
 			document.getElementById("contractorE").value = res.data[3];
 			document.getElementById("distractE").value = res.data[4];
+			try{
+				document.getElementById("orderTypeE").value = res.data[2];
+				document.getElementById("materialsE").value = res.data[6];
+			}catch{}
 			if(res.data[5]){
 				document.getElementById("check1").checked = true;
 				$("#violationConditionE").val("yes");
@@ -626,4 +629,39 @@ $(document).on("click", ".list > button", function(){
 			console.log(res);
 		}
 	});
+});
+
+
+$(document).on("click",".close-btn", function(){
+	document.getElementById('switch1').style.marginLeft='-200%';
+	
+	objectsCount = 0;
+	addressesCount = 0;
+	violationsCount = 0;
+
+	objectsCountE = 0;
+	addressesCountE = 0;
+	violationsCountE = 0;
+
+	$("#objectsImagesE").empty();
+	$("#addressesImagesE").empty();
+	$("#violationsImagesE").empty();
+});
+
+$(document).on("change", "#orderTypeE", function(){
+	if(this.value == "طوارئ"){
+		document.querySelector("[name='orderNumE']").placeholder = "رقم العطل"
+	}
+	else if(this.value == "إحلال" || this.value == "التعزيز" || this.value == "الجهد المتوسط"){
+		document.querySelector("[name='orderNumE']").placeholder = "رقم العمل"
+	}
+});
+
+$(document).on("change", "[name='orderType']", function(){
+	if(this.value == "طوارئ"){
+		document.querySelector("[name='orderNum']").placeholder = "رقم العطل"
+	}
+	else if(this.value == "إحلال" || this.value == "التعزيز" || this.value == "الجهد المتوسط"){
+		document.querySelector("[name='orderNum']").placeholder = "رقم العمل"
+	}
 });

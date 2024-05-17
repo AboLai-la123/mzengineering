@@ -95,7 +95,7 @@
         <form method = "POST" data-form id = "editOrderForm" enctype="multipart/form-data">
             <input type="hidden" id="orderPK" name="orderPK">
             <p class="form-header">تعديل طلب</p>
-            <button type="button" onclick="document.getElementById('switch1').style.marginLeft='-200%';" class="ibtn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
+            <button type="button" class="ibtn close-btn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
             {% csrf_token %}
             <input type="text" name="orderNumE" id = "orderNumE" placeholder="رقم الطلب" required><br>
             <select name="orderTypeE" id = "orderTypeE">
