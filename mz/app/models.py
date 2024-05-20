@@ -26,8 +26,8 @@ def is_taken_with_phone(image_path):
     return 'Model' in exif_data
 
 if os.path.expanduser("~") == 'C:\\Users\\H1720':
-    thePath = r"C:\Users\H1720\Documents\mz-engineering\mzengineering\static\fonts\arial.ttf"
-    theLogo = r"C:\Users\H1720\Documents\mz-engineering\mzengineering\static\img\logo.png"
+    thePath = r"C:\Users\H1720\Documents\mz-engineering\mz\static\fonts\arial.ttf"
+    theLogo = r"C:\Users\H1720\Documents\mz-engineering\mz\static\img\logo.png"
 else:
     thePath = "/home/assays/mzengineering/mz/static/fonts/arial.ttf"
     theLogo = "/home/assays/mzengineering/mz/static/img/logo.png"
@@ -67,6 +67,7 @@ class Order(models.Model):
     day                 = models.CharField(max_length=5)
     safety_violations   = models.BooleanField(default=False)
     archived            = models.BooleanField(default=False)
+    pdf_file_name       = models.TextField(null=True,blank=True)
 
     def __str__(self):
         return str(self.order_num) + " " + self.order_type
@@ -138,6 +139,10 @@ class Object(models.Model):
 
     #     myImage.save(apath)
 
+    def delete(self, using=None, keep_parents=False):
+        self.object_img.delete()
+        super().delete()
+
     def updateImage(self, *args, **kwargs):
         super(Object, self).save(*args, **kwargs)
 
@@ -183,6 +188,10 @@ class Address(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     address_img = models.ImageField(default='img/unknown.png' , upload_to="address")
 
+    def delete(self, using=None, keep_parents=False):
+        self.address_img.delete()
+        super().delete()
+
     def updateImage(self, *args, **kwargs):
         reshaped_text = arabic_reshaper.reshape(self.order.user.consultant_name)
         bidi_text = bidi.algorithm.get_display(reshaped_text)
@@ -222,3 +231,7 @@ class Violation(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     violation_img = models.ImageField(default='img/unknown.png' , upload_to="violation_img")
     notes = models.TextField()
+
+    def delete(self, using=None, keep_parents=False):
+        self.violation_img.delete()
+        super().delete()

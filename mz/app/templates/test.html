@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bla bla</title>
+</head>
+<body>
+    <script>
+        // تحقق إذا كان المستخدم قد منح الإذن للوصول إلى الموقع
+if (navigator.geolocation) {
+  // اطلب إذن الوصول إلى الموقع
+  navigator.geolocation.getCurrentPosition(function(position) {
+    // تم منح الإذن، جلب الإحداثيات
+    console.log('تم منح الإذن للوصول إلى الموقع!');
+    console.log('خط العرض:', position.coords.latitude);
+    console.log('خط الطول:', position.coords.longitude);
+  }, function(error) {
+    // لم يتم منح الإذن، عالج الخطأ
+    console.error('لم يتم منح الإذن للوصول إلى الموقع:', error);
+  });
+} else {
+  // موقع الويب غير مدعوم
+  console.error('موقع الويب غير مدعوم');
+}
+
+    </script>
+</body>
+</html>

@@ -10,6 +10,7 @@ from PIL import Image
 import uuid
 import os
 from datetime import *
+from PIL import Image
 
 # Create your views here.
 def login(request):
@@ -455,6 +456,33 @@ def projects(request):
 
     return render(request, 'projects.html', context)
 
+def export(request, orderNum):
+    if not request.user.is_authenticated:
+        return redirect("/login")
+    else:
+        orderGet = Order.objects.get(order_num = orderNum)
+        try:
+            file_path = './media/exportPDF/'+orderGet.pdf_file_name
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type='application/pdf')
+                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+                return response
+        except:
+            file_path = '/home/assays/mzengineering/mz/media/exportPDF/'+orderGet.pdf_file_name
+            with open(file_path, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type='application/pdf')
+                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+                return response
+        raise Http404
+
+def delete(request, orderNum):
+    if not request.user.is_authenticated:
+        return redirect("/login")
+    else:
+        orderGet = Order.objects.get(order_num = orderNum)
+        orderGet.delete()
+        return redirect("/")
+
 def subscribers(request):
     context = {'lang':"ar"}
     if not request.user.is_authenticated:
@@ -549,6 +577,7 @@ def subscribers(request):
                 archived = False
                 if request.POST["isArchive"] == "yes":
                     archived = True
+                pdfFileName = f'{uuid.uuid4().hex}.pdf'
                 orderCreate = Order.objects.create(
                     order_num = request.POST["orderNum"],
                     order_type = request.POST["orderType"],
@@ -559,9 +588,11 @@ def subscribers(request):
                     month = now.month,
                     day = now.day,
                     safety_violations = violationCondition,
-                    archived = archived
+                    archived = archived,
+                    pdf_file_name = pdfFileName,
                 )
                 orderCreate.save()
+                image_list = []
                 for file in request.FILES:
                     if "objectBox" in file:
                         objectImageCreate = Object.objects.create(
@@ -570,6 +601,7 @@ def subscribers(request):
                         )
                         objectImageCreate.save()
                         objectImageCreate.updateImage()
+                        image_list.append(Image.open(objectImageCreate.object_img))
                     elif "addressBox" in file:
                         addressImageCreate = Address.objects.create(
                             order = orderCreate,
@@ -577,6 +609,7 @@ def subscribers(request):
                         )
                         addressImageCreate.save()
                         addressImageCreate.updateImage()
+                        image_list.append(Image.open(addressImageCreate.address_img))
                     elif "violationsBox" in file:
                         violationImageCreate = Violation.objects.create(
                             order = orderCreate,
@@ -584,7 +617,9 @@ def subscribers(request):
                             notes = request.POST[f"note{file.replace('violationsBox','')}"]
                         )
                         violationImageCreate.save()
+                        image_list.append(Image.open(violationImageCreate.violation_img))
                 nextUrl = "/subscribers"
+        image_list[0].save(f'media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
         return JsonResponse({"errtitle":errtitle, "nextUrl":nextUrl})
     else:
         data = []
@@ -656,6 +691,20 @@ def subscribers(request):
 
     return render(request, 'subscribers.html', context)
 
+def test(request):
+    return render(request, "test.html")
+
+def still(request):
+    context = {'lang':"ar"}
+    if not request.user.is_authenticated:
+        return redirect("/login")
+    else:
+        user = User.objects.get(pk=request.user.pk)
+        userTable = UserTable.objects.get(main_user=user)
+        context['user'] = userTable
+
+    return render(request, 'still.html', context)
+
 def home(request):
     context = {'lang':"ar"}
     if not request.user.is_authenticated:
@@ -670,7 +719,7 @@ def home(request):
         data = []
         months = [1,2,3,4,5,6,7,8,9,10,11,12]
         for m in months:
-            dataFilter = Order.objects.filter(month=str(m),archived=True)
+            dataFilter = Order.objects.filter(month=str(m),archived=False)
             if m == 1:monthName = "يناير"
             if m == 2:monthName = "فبراير"
             if m == 3:monthName = "مارس"
@@ -736,19 +785,3 @@ def home(request):
         context['data']=data
 
     return render(request, 'home.html', context)
-
-def export(request, fileName):
-    if request.user.is_authenticated:
-        try:
-            file_path = './media/exportPDF/'+fileName
-            with open(file_path, 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
-                return response
-        except:
-            file_path = '/home/assays/electricPortalWeb/electric_portal/media/exportPDF/'+fileName
-            with open(file_path, 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
-                return response
-    raise Http404

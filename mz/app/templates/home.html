@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp" />
   </head>
   <body>
+    <input type="hidden" id="userRole" value="{{user.user_role}}">
     <nav>
       <button id="nav"><span class="material-symbols-sharp">menu</span></button>
       <p class="header">{% block header %}الصفحة الرئيسية{% endblock %}</p>
@@ -28,6 +29,9 @@
         <li><a href="/operations">العمليات والصيانة</a></li>
         <li><a href="/projects">المشاريع</a></li>
         <li><a href="/settings">الضبط</a></li>
+        {% if user.user_role == "admin" %}
+        <li><a href="/admin">الإدارة</a></li>
+        {% endif %}
         <li><a style="color:red" href="/logout">تسجيل الخروج</a></li>
       </ul>
     </nav>
@@ -40,7 +44,7 @@
           {% for d in data %}
           <p>{{d.0}}</p>
           {% for w in d.1 %}
-          <button data-order = "{{w.3}}" onclick="document.getElementById('switch1').style.marginLeft='-100%';">
+          <button data-order = "{{w.3}}" data-type="home" onclick="document.getElementById('switch1').style.marginLeft='-100%';">
               <p class="header">رقم الطلب : {{w.0}}</p>
               <p class="sub-header">نوع الطلب : {{w.1}}</p>
               <p class="date">{{w.2}}</p>
@@ -51,74 +55,26 @@
         </div>
       </div>
       <div id="switch2">
-            <p class="form-header">الطلب رقم : <span id="orderIDLabel"></span></p>
+            <p class="form-header" dir="rtl" style="margin-right:20px;" id="orderNum"></p>
             <button type="button" onclick="document.getElementById('switch1').removeAttribute('style')" class="ibtn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
-      </div>
-      <div id="switch3">
-        <form method = "POST" data-form id = "editOrderForm" enctype="multipart/form-data">
-            <input type="hidden" id="orderPK" name="orderPK">
-            <p class="form-header">تعديل طلب</p>
-            <button type="button" class="ibtn close-btn" style="margin-top:-50px;float:left;background-color:transparent;"><span class="material-symbols-sharp">close</span></button>
-            {% csrf_token %}
-            <input type="text" name="orderNumE" id = "orderNumE" placeholder="رقم الطلب" required><br>
-            <select name="orderTypeE" id = "orderTypeE">
-                <option value="تنفيذ شبكة">تنفيذ شبكة</option>
-                <option value="عداد">عداد</option>
-            </select><br>
-            <input type="text" name="contractorE" id = "contractorE" placeholder="المقاول" required><br>
-            <input type="text" name="distractE" id = "distractE" placeholder="الحي" required><br>
-            <p class="text">الصور</p>
-            <h3 style="text-align:right;">النماذج</h3>
-            <br><br>
-            <button type="button" data-for="objectE" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
-            <input type="file" id="objectE" accept="image/*" hidden>
-            <div id="objectsImagesE">
+            <div style="width:100%;padding:20px;">
+              <div style="display:grid;grid-template-columns: 47.5% 47.5%;gap:5%;">
+                <button id="delete" class="primary">حذف</button>
+                <button id="export" class="primary">تصدير</button>
+                {% csrf_token %}
+              </div>
+              <br>
+              <br>
+              <p class="main-value" dir="rtl">نوع الطلب<span class="value" id="orderType"></span></p><hr>
+              <p class="main-value" dir="rtl">المقاول<span class="value" id="contractor"></span></p><hr>
+              <p class="main-value" dir="rtl">الحي<span class="value" id="distract"></span></p><hr>
+              <p class="main-value" dir="rtl">المواد<span class="value" id="materials"></span></p><hr>
+              <br>
+              <br>
+              <div id="objectsImages" class="a"></div>
+              <div id="violationsImages" class="a"></div>
+              <div id="addressesImages" class="a"></div>
             </div>
-            <br>
-            <br>
-            <h3 style="text-align:right;">صور الموقع</h3>
-            <br><br>
-            <button type="button" data-for="addressE" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
-            <input type="file" id="addressE" accept="image/*" hidden>
-            <div id="addressesImagesE">
-            </div>
-            <br>
-            <p class="text">مخالفات السلامة</p>
-            <label style="float:right;" class="pure-material-radio">
-                <input type="radio" id="check1" onchange="document.getElementById('violationConditionE').value='on';document.getElementById('violationsContainerE').style.display = 'block';" name="groupE">
-                <span>توجد</span>
-            </label>
-            <br/>
-            <br/>
-            <label style="float:right;" class="pure-material-radio">
-                <input type="radio" onchange="document.getElementById('violationConditionE').value='off';document.getElementById('violationsContainerE').style.display = 'none';" name="groupE" checked>
-                <span>لا توجد</span>
-            </label>
-
-            <input type="hidden" id="violationConditionE" name="violationConditionE" value="off">
-
-            <div style="display:none;" id="violationsContainerE">
-                <br>
-                <br>
-                <h3 style="text-align:right;">مخالفات السلامة</h3>
-                <br><br>
-                <button type="button" data-for="violationE" class="ibtn" style="margin-top:-75px;float:left;"><span class="material-symbols-sharp">add</span></button>
-                <input type="file" id="violationE" accept="image/*" hidden>
-                <!-- <div id="violationsImages">
-                </div> -->
-                <div id="violationsImagesE">
-                </div>
-            </div>
-
-            <br>
-            <br>
-            <hr>
-            <br>
-            <br>
-            <input type="hidden" id="isArchiveE" name="isArchiveE" value="no">
-            <button type="button" id="saveBtnE" class="primary">حفظ الطلب</button>
-            <button type="button" id="archiveBtnE" class="primary">أرشفة الطلب</button>
-        </form>
       </div>
 
       

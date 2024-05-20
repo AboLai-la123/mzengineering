@@ -17,7 +17,7 @@ function snackBar(title , tp="0"){
 			document.getElementById("snackbar").removeAttribute("style");
 			setTimeout(function(){
 				document.getElementById("snackbar").style.bottom="20px";
-				document.getElementById("snackbarText").innerHTML = String(rettext(title));
+				document.getElementById("snackbarText").textContent = title;
 				setTimeout(function(){
 					document.getElementById("snackbar").removeAttribute("style");
 					snack_wit = false;
@@ -37,7 +37,7 @@ function snackBar(title , tp="0"){
 			document.getElementById("snackbar").removeAttribute("style");
 			setTimeout(function(){
 				document.getElementById("snackbar").style.bottom="20px";
-				document.getElementById("snackbarText").innerHTML = String(rettext(title));
+				document.getElementById("snackbarText").textContent = title;
 				setTimeout(function(){
 					document.getElementById("snackbar").removeAttribute("style");
 					snack_wit = false;
@@ -57,7 +57,7 @@ function otherSnackbar(title){
 		document.getElementById("snackbar").removeAttribute("style");
 		setTimeout(function(){
 			document.getElementById("snackbar").style.bottom="20px";
-			document.getElementById("snackbarText").innerHTML = String(title);
+			document.getElementById("snackbarText").textContent = title;
 			setTimeout(function(){
 				document.getElementById("snackbar").removeAttribute("style");
 				snack_wit = false;
@@ -106,7 +106,11 @@ $(document).on("submit", "form[data-form]",function(e){
 
 $(document).on("click","#nav",function(){
 	if(document.querySelector("nav").style.height == ""){
-		document.querySelector("nav").style.height = "300px";
+		if($('#userRole').val() == "admin"){
+			document.querySelector("nav").style.height = "340px";
+		}else{
+			document.querySelector("nav").style.height = "300px";
+		}
 	}else{
 		document.querySelector("nav").removeAttribute("style");
 	}
@@ -149,14 +153,14 @@ $(document).on("change","#object", function(evt){
     }
 
 	p = document.createElement("p");
-	p.innerHTML = document.getElementById("object").value.split("\\").pop();
+	p.textContent = document.getElementById("object").value.split("\\").pop();
 	button = document.createElement("button");
 	button.type = "button";
 	button.className = "btn ibtn";
 	button.dataset.close = `objectBox${objectsCount}`;
 	span = document.createElement("span");
 	span.className = "material-symbols-sharp";
-	span.innerHTML = "close";
+	span.textContent = "close";
 	$(button).append(span);
 	$(imgCard).append(imgCardBox);
 	$(imgCard).append(p);
@@ -202,14 +206,14 @@ $(document).on("change","#address", function(evt){
     }
 
 	p = document.createElement("p");
-	p.innerHTML = document.getElementById("address").value.split("\\").pop();
+	p.textContent = document.getElementById("address").value.split("\\").pop();
 	button = document.createElement("button");
 	button.type = "button";
 	button.className = "btn ibtn";
 	button.dataset.close = `addressBox${addressesCount}`;
 	span = document.createElement("span");
 	span.className = "material-symbols-sharp";
-	span.innerHTML = "close";
+	span.textContent = "close";
 	$(button).append(span);
 	$(imgCard).append(imgCardBox);
 	$(imgCard).append(p);
@@ -256,14 +260,14 @@ $(document).on("change","#violation", function(evt){
     }
 
 	p = document.createElement("p");
-	p.innerHTML = document.getElementById("violation").value.split("\\").pop();
+	p.textContent = document.getElementById("violation").value.split("\\").pop();
 	button = document.createElement("button");
 	button.type = "button";
 	button.className = "btn ibtn";
 	button.dataset.close = `violationBox${violationsCount}`;
 	span = document.createElement("span");
 	span.className = "material-symbols-sharp";
-	span.innerHTML = "close";
+	span.textContent = "close";
 	$(button).append(span);
 	$(imgCard).append(imgCardBox);
 	$(imgCard).append(p);
@@ -318,14 +322,14 @@ $(document).on("change","#objectE", function(evt){
     }
 
 	p = document.createElement("p");
-	p.innerHTML = document.getElementById("objectE").value.split("\\").pop();
+	p.textContent = document.getElementById("objectE").value.split("\\").pop();
 	button = document.createElement("button");
 	button.type = "button";
 	button.className = "btn ibtn";
 	button.dataset.close = `objectBoxE${objectsCountE}`;
 	span = document.createElement("span");
 	span.className = "material-symbols-sharp";
-	span.innerHTML = "close";
+	span.textContent = "close";
 	$(button).append(span);
 	$(imgCard).append(imgCardBox);
 	$(imgCard).append(p);
@@ -371,14 +375,14 @@ $(document).on("change","#addressE", function(evt){
     }
 
 	p = document.createElement("p");
-	p.innerHTML = document.getElementById("addressE").value.split("\\").pop();
+	p.textContent = document.getElementById("addressE").value.split("\\").pop();
 	button = document.createElement("button");
 	button.type = "button";
 	button.className = "btn ibtn";
 	button.dataset.close = `addressBoxE${addressesCountE}`;
 	span = document.createElement("span");
 	span.className = "material-symbols-sharp";
-	span.innerHTML = "close";
+	span.textContent = "close";
 	$(button).append(span);
 	$(imgCard).append(imgCardBox);
 	$(imgCard).append(p);
@@ -425,14 +429,14 @@ $(document).on("change","#violationE", function(evt){
     }
 
 	p = document.createElement("p");
-	p.innerHTML = document.getElementById("violationE").value.split("\\").pop();
+	p.textContent = document.getElementById("violationE").value.split("\\").pop();
 	button = document.createElement("button");
 	button.type = "button";
 	button.className = "btn ibtn";
 	button.dataset.close = `violationBoxE${violationsCountE}`;
 	span = document.createElement("span");
 	span.className = "material-symbols-sharp";
-	span.innerHTML = "close";
+	span.textContent = "close";
 	$(button).append(span);
 	$(imgCard).append(imgCardBox);
 	$(imgCard).append(p);
@@ -550,8 +554,16 @@ $(document).on("click","#archiveBtnE", function(){
 	orderFormE();
 });
 
+$(document).on("click", "#delete", function(){
+	location.href = rettext(`/delete/${document.getElementById("orderNum").textContent}`);
+});
+
+$(document).on("click", "#export", function(){
+	location.href = rettext(`/export/${document.getElementById("orderNum").textContent}`);
+});
 
 $(document).on("click", ".list > button", function(){
+	this_el = this;
 	$.ajax({
 		url: location.href,
 		data: {
@@ -561,69 +573,107 @@ $(document).on("click", ".list > button", function(){
 		type: 'GET',
 		dataType: 'json',
 		success: function(res) {
-			document.getElementById("orderPK").value = res.data[0];
-			document.getElementById("orderNumE").value = res.data[1];
-			document.getElementById("contractorE").value = res.data[3];
-			document.getElementById("distractE").value = res.data[4];
-			try{
-				document.getElementById("orderTypeE").value = res.data[2];
-				document.getElementById("materialsE").value = res.data[6];
-			}catch{}
-			if(res.data[5]){
-				document.getElementById("check1").checked = true;
-				$("#violationConditionE").val("yes");
-				document.getElementById("violationsContainerE").style.display = "block";
+			if(this_el.dataset.type == "home"){
+				document.getElementById("orderNum").textContent = res.data[1];
+				document.getElementById("orderType").textContent = res.data[2];
+				document.getElementById("contractor").textContent = res.data[3];
+				document.getElementById("distract").textContent = res.data[4];
+				document.getElementById("materials").value = res.data[6];
+				res.objects.forEach(image => {
+					$("#objectsImages").append(`
+						<div class="img-card img-card-2">
+							<div class="img-card-box">
+								<img src="${rettext(image[0])}">
+							</div>
+							<p>${rettext(image[2])}</p>
+						</div>
+					`);
+				});
+				res.addresses.forEach(image => {
+					$("#objectsImages").append(`
+						<div class="img-card img-card-2">
+							<div class="img-card-box">
+								<img src="${rettext(image[0])}">
+							</div>
+							<p>${rettext(image[2])}</p>
+						</div>
+					`);
+				});
+				res.violations.forEach(image => {
+					$("#objectsImages").append(`
+						<div class="img-card img-card-2">
+							<div class="img-card-box">
+								<img src="${rettext(image[0])}">
+							</div>
+							<p>${rettext(image[2])}</p>
+						</div>
+					`);
+				});
+			}else{
+				document.getElementById("orderNumE").value = res.data[1];
+				document.getElementById("contractorE").value = res.data[3];
+				document.getElementById("distractE").value = res.data[4];
+				try{
+					document.getElementById("orderPK").value = res.data[0];
+					document.getElementById("orderTypeE").value = res.data[2];
+					document.getElementById("materialsE").value = res.data[6];
+				}catch{}
+				if(res.data[5]){
+					document.getElementById("check1").checked = true;
+					$("#violationConditionE").val("yes");
+					document.getElementById("violationsContainerE").style.display = "block";
+				}
+				res.objects.forEach(image => {
+					$("#objectsImagesE").append(`
+						<div class="img-card" id="objectBoxE${rettext(image[1])}">
+							<div class="img-card-box">
+								<img src="${rettext(image[0])}">
+							</div>
+							<p>${rettext(image[2])}</p>
+							<button type="button" class="btn ibtn" data-close="objectBoxE${rettext(image[1])}"><span class="material-symbols-sharp">close</span></button>
+							<input type="file" id="objectBoxE${rettext(image[1])}" accept="image/*" hidden="" name="objectBoxE${rettext(image[1])}">
+						</div>
+					`);
+					if(image[1] >= objectsCountE){
+						objectsCountE = image[1] + 1;
+					}
+				});
+
+				res.addresses.forEach(image => {
+					$("#addressesImagesE").append(`
+						<div class="img-card" id="addressBoxE${rettext(image[1])}">
+							<div class="img-card-box">
+								<img src="${rettext(image[0])}">
+							</div>
+							<p>${rettext(image[2])}</p>
+							<button type="button" class="btn ibtn" data-close="addressBoxE${rettext(image[1])}"><span class="material-symbols-sharp">close</span></button>
+							<input type="file" id="addressBoxE${rettext(image[1])}" accept="image/*" hidden="" name="addressBoxE${rettext(image[1])}">
+						</div>
+					`);
+					
+					if(image[1] >= addressesCountE){
+						addressesCountE = image[1] + 1
+					}
+				});
+
+				res.violations.forEach(image => {
+					$("#violationsImagesE").append(`
+						<div class="img-card" id="violationBoxE${rettext(image[1])}">
+							<div class="img-card-box">
+								<img src="${rettext(image[0])}">
+							</div>
+							<p>${rettext(image[2])}</p>
+							<button type="button" class="btn ibtn" data-close="violationBoxE${rettext(image[1])}"><span class="material-symbols-sharp">close</span></button>
+							<input type="file" id="violationBoxE${rettext(image[1])}" accept="image/*" hidden="" name="violationBoxE${rettext(image[1])}">
+						</div>
+						<textarea name="noteE${rettext(image[1])}" id="note${rettext(image[1])}" placeholder="وصف المخالفة" class="note">${rettext(image[3])}</textarea>
+					`);
+					
+					if(image[1] >= violationsCountE){
+						violationsCountE = image[1] + 1;
+					}
+				});
 			}
-			res.objects.forEach(image => {
-				$("#objectsImagesE").append(`
-					<div class="img-card" id="objectBoxE${image[1]}">
-						<div class="img-card-box">
-							<img src="${image[0]}">
-						</div>
-						<p>${image[2]}</p>
-						<button type="button" class="btn ibtn" data-close="objectBoxE${image[1]}"><span class="material-symbols-sharp">close</span></button>
-						<input type="file" id="objectBoxE${image[1]}" accept="image/*" hidden="" name="objectBoxE${image[1]}">
-					</div>
-				`);
-				if(image[1] >= objectsCountE){
-					objectsCountE = image[1] + 1;
-				}
-			});
-
-			res.addresses.forEach(image => {
-				$("#addressesImagesE").append(`
-					<div class="img-card" id="addressBoxE${image[1]}">
-						<div class="img-card-box">
-							<img src="${image[0]}">
-						</div>
-						<p>${image[2]}</p>
-						<button type="button" class="btn ibtn" data-close="addressBoxE${image[1]}"><span class="material-symbols-sharp">close</span></button>
-						<input type="file" id="addressBoxE${image[1]}" accept="image/*" hidden="" name="addressBoxE${image[1]}">
-					</div>
-				`);
-				
-				if(image[1] >= addressesCountE){
-					addressesCountE = image[1] + 1
-				}
-			});
-
-			res.violations.forEach(image => {
-				$("#violationsImagesE").append(`
-					<div class="img-card" id="violationBoxE${image[1]}">
-						<div class="img-card-box">
-							<img src="${image[0]}">
-						</div>
-						<p>${image[2]}</p>
-						<button type="button" class="btn ibtn" data-close="violationBoxE${image[1]}"><span class="material-symbols-sharp">close</span></button>
-						<input type="file" id="violationBoxE${image[1]}" accept="image/*" hidden="" name="violationBoxE${image[1]}">
-					</div>
-					<textarea name="noteE${image[1]}" id="note${image[1]}" placeholder="وصف المخالفة" class="note">${image[3]}</textarea>
-				`);
-				
-				if(image[1] >= violationsCountE){
-					violationsCountE = image[1] + 1;
-				}
-			});
 		},
 		error: function(res){
 			snackBar("حدث خطأ اثناء الحفظ !");
