@@ -147,13 +147,13 @@ class Object(models.Model):
         super(Object, self).save(*args, **kwargs)
 
         reshaped_text = arabic_reshaper.reshape(self.order.user.consultant_name)
-        bidi_text = bidi.algorithm.get_display(reshaped_text)
+        bidi_text = bidi.algorithm.get_display(reshaped_text[::-1])
         reshaped_text2 = arabic_reshaper.reshape(self.order.distract)
-        bidi_text2 = bidi.algorithm.get_display(reshaped_text2)
+        bidi_text2 = bidi.algorithm.get_display(reshaped_text2[::-1])
         reshaped_text3 = arabic_reshaper.reshape(str(self.order.date.date()))
         bidi_text3 = bidi.algorithm.get_display(reshaped_text3)
         reshaped_text4 = arabic_reshaper.reshape("النماذج")
-        bidi_text4 = bidi.algorithm.get_display(reshaped_text4)
+        bidi_text4 = bidi.algorithm.get_display(reshaped_text4[::-1])
         apath = self.object_img.path
         limg = Image.open(apath)
         isImageTakedWithPhone = is_taken_with_phone(apath)
@@ -194,13 +194,13 @@ class Address(models.Model):
 
     def updateImage(self, *args, **kwargs):
         reshaped_text = arabic_reshaper.reshape(self.order.user.consultant_name)
-        bidi_text = bidi.algorithm.get_display(reshaped_text)
+        bidi_text = bidi.algorithm.get_display(reshaped_text[::-1])
         reshaped_text2 = arabic_reshaper.reshape(self.order.distract)
-        bidi_text2 = bidi.algorithm.get_display(reshaped_text2)
+        bidi_text2 = bidi.algorithm.get_display(reshaped_text2[::-1])
         reshaped_text3 = arabic_reshaper.reshape(str(self.order.date))
         bidi_text3 = bidi.algorithm.get_display(reshaped_text3)
         reshaped_text4 = arabic_reshaper.reshape("صور الموقع")
-        bidi_text4 = bidi.algorithm.get_display(reshaped_text4)
+        bidi_text4 = bidi.algorithm.get_display(reshaped_text4[::-1])
         apath = self.address_img.path
         limg = Image.open(apath)
         isImageTakedWithPhone = is_taken_with_phone(apath)

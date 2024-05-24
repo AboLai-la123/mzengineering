@@ -27,7 +27,9 @@ elect:focus, input:focus, textarea:focus{
     border-radius:5px;
     font-size:12pt;
 }
-
+ul {
+    list-style-type: none;
+}
 
 nav{
     width:100%;

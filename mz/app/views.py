@@ -461,13 +461,13 @@ def export(request, orderNum):
         return redirect("/login")
     else:
         orderGet = Order.objects.get(order_num = orderNum)
-        try:
+        if os.path.expanduser("~") == 'C:\\Users\\H1720':
             file_path = './media/exportPDF/'+orderGet.pdf_file_name
             with open(file_path, 'rb') as fh:
                 response = HttpResponse(fh.read(), content_type='application/pdf')
                 response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
                 return response
-        except:
+        else:
             file_path = '/home/assays/mzengineering/mz/media/exportPDF/'+orderGet.pdf_file_name
             with open(file_path, 'rb') as fh:
                 response = HttpResponse(fh.read(), content_type='application/pdf')
@@ -619,7 +619,10 @@ def subscribers(request):
                         violationImageCreate.save()
                         image_list.append(Image.open(violationImageCreate.violation_img))
                 nextUrl = "/subscribers"
-        image_list[0].save(f'media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
+        if os.path.expanduser("~") == 'C:\\Users\\H1720':
+            image_list[0].save(f'media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
+        else:
+            image_list[0].save(f'/home/assays/mzengineering/mz/media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
         return JsonResponse({"errtitle":errtitle, "nextUrl":nextUrl})
     else:
         data = []
