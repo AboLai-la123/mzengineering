@@ -119,7 +119,6 @@ def operations(request):
                             object_img = request.FILES[file]
                         )
                         objectImageCreate.save()
-                        objectImageCreate.updateImage()
                     elif "addressBox" in file:
                         addressImageCreate = Address.objects.create(
                             order = orderGet,
@@ -168,7 +167,6 @@ def operations(request):
                             object_img = request.FILES[file]
                         )
                         objectImageCreate.save()
-                        objectImageCreate.updateImage()
                     elif "addressBox" in file:
                         addressImageCreate = Address.objects.create(
                             order = orderCreate,
@@ -322,7 +320,6 @@ def projects(request):
                             object_img = request.FILES[file]
                         )
                         objectImageCreate.save()
-                        objectImageCreate.updateImage()
                     elif "addressBox" in file:
                         addressImageCreate = Address.objects.create(
                             order = orderGet,
@@ -369,7 +366,6 @@ def projects(request):
                             object_img = request.FILES[file]
                         )
                         objectImageCreate.save()
-                        objectImageCreate.updateImage()
                     elif "addressBox" in file:
                         addressImageCreate = Address.objects.create(
                             order = orderCreate,
@@ -549,7 +545,6 @@ def subscribers(request):
                             object_img = request.FILES[file]
                         )
                         objectImageCreate.save()
-                        objectImageCreate.updateImage()
                     elif "addressBox" in file:
                         addressImageCreate = Address.objects.create(
                             order = orderGet,
@@ -600,7 +595,6 @@ def subscribers(request):
                             object_img = request.FILES[file]
                         )
                         objectImageCreate.save()
-                        objectImageCreate.updateImage()
                         image_list.append(Image.open(objectImageCreate.object_img))
                     elif "addressBox" in file:
                         addressImageCreate = Address.objects.create(
@@ -620,9 +614,11 @@ def subscribers(request):
                         image_list.append(Image.open(violationImageCreate.violation_img))
                 nextUrl = "/subscribers"
         if os.path.expanduser("~") == 'C:\\Users\\H1720':
-            image_list[0].save(f'media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
+            if len(image_list) != 0:
+                image_list[0].save(f'media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
         else:
-            image_list[0].save(f'/home/assays/mzengineering/mz/media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
+            if len(image_list) != 0:
+                image_list[0].save(f'/home/assays/mzengineering/mz/media/exportPDF/{pdfFileName}', save_all=True, append_images=image_list[1:])
         return JsonResponse({"errtitle":errtitle, "nextUrl":nextUrl})
     else:
         data = []
@@ -693,9 +689,6 @@ def subscribers(request):
         context['data']=data
 
     return render(request, 'subscribers.html', context)
-
-def test(request):
-    return render(request, "test.html")
 
 def still(request):
     context = {'lang':"ar"}

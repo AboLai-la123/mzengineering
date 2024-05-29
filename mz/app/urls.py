@@ -12,7 +12,6 @@ urlpatterns = [
     path('projects',views.projects,name='projects'),
     path('logout',views.logout,name='logout'),
     path('login',views.login,name='login'),
-    path('test',views.test,name='test'),
     path('settings',views.still,name='still'),
     path('export/<fileName>',views.export,name='export'),
 ]
